@@ -4,43 +4,37 @@ package spring.boot.Kataboot.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import spring.boot.Kataboot.Repository.Rep;
+import spring.boot.Kataboot.DAO.UserDao;
 import spring.boot.Kataboot.model.User;
 
 import java.util.List;
 @Service
 public class UserServiceImpl implements UserService  {
-    private final Rep rep;
-
+    UserDao userDao;
     @Autowired
-    public UserServiceImpl (Rep rep) {
-        this.rep = rep;
+    public UserServiceImpl(UserDao userDao) {
+        this.userDao = userDao;
     }
+
+    public UserServiceImpl () {}
     @Transactional
     @Override
     public void add(User user) {
-         rep.save(user);
-    }
+        userDao.add(user); }
     @Transactional
     @Override
     public void remove(int id) {
-
-        rep.deleteById(id);
+        userDao.remove(id);
     }
     @Transactional
     @Override
-    public void update(int id, User user) {
-        user.setId(id);
-        rep.save(user);
-    }
+    public void update(int id, User user) { userDao.update(id, user); }
 
     @Override
     public List<User> getAllUsers() {
-        return rep.findAll();
+        return userDao.getAllUsers();
     }
 
     @Override
-    public User get(int id) {
-        return rep.findById(id).get();
-    }
+    public User get(int id) { return userDao.get(id); }
 }
