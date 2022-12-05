@@ -4,37 +4,44 @@ package spring.boot.Kataboot.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import spring.boot.Kataboot.DAO.UserDao;
 import spring.boot.Kataboot.model.User;
+import spring.boot.Kataboot.reposytory.UserReposytory;
 
 import java.util.List;
 @Service
 public class UserServiceImpl implements UserService  {
-    UserDao userDao;
+    private final UserReposytory userReposytory;
     @Autowired
-    public UserServiceImpl(UserDao userDao) {
-        this.userDao = userDao;
+    public UserServiceImpl(UserReposytory userReposytory) {
+        this.userReposytory = userReposytory;
     }
 
-    public UserServiceImpl () {}
     @Transactional
     @Override
     public void add(User user) {
-        userDao.add(user); }
+        userReposytory.save(user);
+    }
+
     @Transactional
     @Override
     public void remove(int id) {
-        userDao.remove(id);
+        userReposytory.deleteById(id);
     }
+
     @Transactional
     @Override
-    public void update(int id, User user) { userDao.update(id, user); }
+    public void update(int id, User user) {
+        user.setId(id);
+        userReposytory.save(user);
+    }
 
     @Override
     public List<User> getAllUsers() {
-        return userDao.getAllUsers();
+        return userReposytory.findAll();
     }
 
     @Override
-    public User get(int id) { return userDao.get(id); }
+    public User get(int id) {
+        return userReposytory.findById(id).get();
+    }
 }
